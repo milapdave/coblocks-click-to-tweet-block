@@ -17,28 +17,28 @@ const {
 	source
 } = wp.blocks;
 
-const blockAttributes = {
-	via: {
-		type: 'array',
-		source: 'children',
-		selector: 'cite',
-	},
-	tweet: {
-		type: 'array',
-		source: 'children',
-		selector: '.gutenkit--click-to-tweet__text',
-	},
-	align: {
-		type: 'string',
-		default: 'left',
-	},
-	color__background: {
-		type: 'string',
-	},
-	color__text: {
-		type: 'string',
-	},
-};
+// const blockAttributes = {
+// 	via: {
+// 		type: 'array',
+// 		source: 'children',
+// 		selector: 'cite',
+// 	},
+// 	tweet: {
+// 		type: 'array',
+// 		source: 'children',
+// 		selector: '.gutenkit--click-to-tweet__text',
+// 	},
+// 	align: {
+// 		type: 'string',
+// 		default: 'left',
+// 	},
+// 	color__background: {
+// 		type: 'string',
+// 	},
+// 	color__text: {
+// 		type: 'string',
+// 	},
+// };
 
 /**
  * Register Block.
@@ -64,7 +64,7 @@ registerBlockType( 'gutenkit/click-to-tweet', {
 
 		const {
 			tweet,
-			via,
+			cite,
 			align,
 			color__background,
 			color__text
@@ -101,6 +101,10 @@ registerBlockType( 'gutenkit/click-to-tweet', {
 			setAttributes( { tweet: newTweet } );
 		}
 
+		function onChangeCite( newCite ) {
+			setAttributes( { cite: newCite } );
+		}
+
 		return [
 
 			inspectorControls,
@@ -123,6 +127,7 @@ registerBlockType( 'gutenkit/click-to-tweet', {
 						placeholder={ __( 'Add your tweet text...' ) }
 						className={ 'gutenkit--click-to-tweet__text' }
 						onChange={ onChangeTweet }
+						style={ { color: color__text } }
 						focus={ focus && focus.editable === 'tweet' ? focus : null }
 						onFocus={ ( props ) => setFocus( { props, editable: 'tweet' } ) }
 						// formattingControls={ [] }
@@ -133,17 +138,14 @@ registerBlockType( 'gutenkit/click-to-tweet', {
 						<Editable
 							tagName="cite"
 							multiline="false"
-							value={ via }
+							value={ cite }
 							placeholder={ __( '@username' ) }
 							className={ 'gutenkit--click-to-tweet__via' }
-							onChange={
-								( nextVia ) => setAttributes( {
-									via: nextVia,
-								} )
-							}
-							focus={ focus && focus.editable === 'via' ? focus : null }
-							onFocus={ ( props ) => setFocus( { props, editable: 'via' } ) }
-							formattingControls={ [] }
+							style={ { color: color__text } }
+							onChange={ onChangeCite }
+							focus={ focus && focus.editable === 'cite' ? focus : null }
+							onFocus={ ( props ) => setFocus( { props, editable: 'cite' } ) }
+							// formattingControls={ [] }
 						/>
 					) }
 
@@ -155,14 +157,14 @@ registerBlockType( 'gutenkit/click-to-tweet', {
 
 	save( { attributes, className } ) {
 
-		const { tweet, via, align, color__background, color__text } = attributes;
+		const { tweet, cite, align, color__background, color__text } = attributes;
 
 		return (
 
 			<div className={ className } style={ { textAlign: align } }>
 				<div className={ 'gutenkit--click-to-tweet' } style={ { backgroundColor: color__background } } >
 					<span className={ 'gutenkit--click-to-tweet__text gutenkit--header-font' } style={ { color: color__text } } >{ tweet }</span>
-					<cite className={ 'gutenkit--click-to-tweet__via gutenkit--gray' } style={ { color: color__text } } >{ via }</cite>
+					<cite className={ 'gutenkit--click-to-tweet__via gutenkit--gray' } style={ { color: color__text } } >{ cite }</cite>
 				</div>
 			</div>
 		);

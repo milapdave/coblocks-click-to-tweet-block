@@ -35,7 +35,10 @@
 
 
 
-function gutenberg_render_block_core_latest_sss( $attributes ) {
+function gutenberg_render_block_core_latest_sss( $attributes, $content ) {
+
+return sprintf($attributes['cite']);
+
 
 	// return print_r( $attributes );
 
@@ -44,60 +47,38 @@ function gutenberg_render_block_core_latest_sss( $attributes ) {
 	// $via   = isset( $attributes['via'] ) ? str_replace( '@', '', $attributes['via'] ) : $attributes['via'];
 	// $align = isset( $attributes['align'] ) ? $attributes['align'] : 'left';
 
-	// Markup and styles.
-	$class      = 'wp-block-gutenkit-click-to-tweet';
-	$text_align = "text-align:{$attributes['align']}";
-	$text_color = "color:{$attributes['color__text']}";
-	$bg_color   = "background-color:{$attributes['color__background']}";
+	// // Markup and styles.
+	// $class      = 'wp-block-gutenkit-click-to-tweet';
+	// $text_align = "text-align:{$attributes['align']}";
+	// $text_color = "color:{$attributes['color__text']}";
+	// $bg_color   = "background-color:{$attributes['color__background']}";
 
-	// Generate the Twitter URL.
-	$url = '
-		http://twitter.com/share?
-		&url=' . get_the_permalink() . '
-		&via=' . $attributes['via'] . '
-	';
+	// // Generate the Twitter URL.
+	// $url = "
+	// 	http://twitter.com/share?
+	// 	&url=" . get_the_permalink() . "
+	// 	&via={$attributes['cite']}
+	// ";
 
-	// Apply filters, so that it may be modified.
-	$url = apply_filters( 'gutenkit_click_to_tweet_url', $url );
+	// // return $attributes['via'];
 
-	// Output the block if a URL is generated.
-	$markup  = '';
-	$markup .= sprintf( '<div class="%1$s" style="%2$s">', esc_attr( $class ), esc_attr( $text_align ) );
-	$markup .= sprintf( '<div class="gutenkit--click-to-tweet" style="%1$s">', esc_attr( $bg_color ) );
-	$markup .= sprintf( '<a class="gutenkit--click-to-tweet__link" target="_blank">%1$s</a>', esc_url( $url ) );
-	$markup .= sprintf( '<span class="gutenkit--click-to-tweet__label gutenkit--gray" style="%1$s">Click to Tweet</a>', esc_attr( $text_color ) );
-	$markup .= sprintf( '</div>' );
-	$markup .= sprintf( '</div>' );
+	// // Apply filters, so that it may be modified.
+	// $url = apply_filters( 'gutenkit_click_to_tweet_url', $url );
+
+	// // Output the block if a URL is generated.
+	// $markup  = '';
+	// $markup .= sprintf( '<div class="%1$s" style="%2$s">', esc_attr( $class ), esc_attr( $text_align ) );
+	// $markup .= sprintf( '<div class="gutenkit--click-to-tweet" style="%1$s">', esc_attr( $bg_color ) );
+	// $markup .= sprintf( '<a class="gutenkit--click-to-tweet__link" target="_blank">%1$s</a>', esc_url( $url ) );
+	// $markup .= sprintf( '<span class="gutenkit--click-to-tweet__label gutenkit--gray" style="%1$s">Click to Tweet</a>', esc_attr( $text_color ) );
+	// $markup .= sprintf( '</div>' );
+	// $markup .= sprintf( '</div>' );
 
 
-	return $markup;
+	// return $markup;
 }
 
-register_block_type( 'gutenkit/click-to-tweet', array(
-	'attributes'      => array(
-		'via'               => array(
-			'type'     => 'string',
-			// 'source'   => 'text',
-			// 'selector' => '.gutenkit--click-to-tweet__via',
-		),
-		'tweet'             => array(
-			'type'     => 'string',
-			// 'source'   => 'text',
-			// 'selector' => '.gutenkit--click-to-tweet__text',
-		),
-		'align'             => array(
-			'type'    => 'string',
-			'default' => 'left',
-		),
-		'color__background' => array(
-			'type' => 'string',
-		),
-		'color__text'       => array(
-			'type' => 'string',
-		),
-	),
-	 'render_callback' => 'gutenberg_render_block_core_latest_sss',
-) );
+
 
 
 
@@ -177,6 +158,37 @@ class Gutenkit_Lite_Click_To_Tweet_Block {
 	 * @access public
 	 */
 	public function register_block() {
+
+		register_block_type( 'gutenkit/click-to-tweet', array(
+			'attributes'      => array(
+				'cite'              => array(
+					'type'     => 'array',
+					'source'   => 'children',
+					'selector' => 'cite',
+				),
+				'tweet'             => array(
+					'type'     => 'array',
+					'source'   => 'children',
+					'selector' => 'span',
+				),
+				'align'             => array(
+					'type'    => 'string',
+					'default' => 'left',
+				),
+				'color__background' => array(
+					'type' => 'string',
+				),
+				'color__text'       => array(
+					'type' => 'string',
+				),
+			),
+			'render_callback' => array( $this, 'on_render_block' ),
+		) );
+	}
+
+	public function on_render_block( $attributes ) {
+
+
 	}
 
 	/**
@@ -275,7 +287,3 @@ class Gutenkit_Lite_Click_To_Tweet_Block {
 }
 
 Gutenkit_Lite_Click_To_Tweet_Block::register();
-// function render_dummy_block( $attributes, $content ) {
-// 		$this->dummy_block_instance_number += 1;
-// 		return $this->dummy_block_instance_number . ':' . $attributes['value'] . ":$content";
-// 	}
