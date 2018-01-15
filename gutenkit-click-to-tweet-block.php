@@ -32,58 +32,6 @@
  * @license   @@pkg.license
  */
 
-
-
-
-function gutenberg_render_block_core_latest_sss( $attributes, $content ) {
-
-return sprintf($attributes['cite']);
-
-
-	// return print_r( $attributes );
-
-	// $tweet = is_array( $attributes ) && isset( $attributes['tweet'] ) ? $attributes['tweet'] : false;
-
-	// $via   = isset( $attributes['via'] ) ? str_replace( '@', '', $attributes['via'] ) : $attributes['via'];
-	// $align = isset( $attributes['align'] ) ? $attributes['align'] : 'left';
-
-	// // Markup and styles.
-	// $class      = 'wp-block-gutenkit-click-to-tweet';
-	// $text_align = "text-align:{$attributes['align']}";
-	// $text_color = "color:{$attributes['color__text']}";
-	// $bg_color   = "background-color:{$attributes['color__background']}";
-
-	// // Generate the Twitter URL.
-	// $url = "
-	// 	http://twitter.com/share?
-	// 	&url=" . get_the_permalink() . "
-	// 	&via={$attributes['cite']}
-	// ";
-
-	// // return $attributes['via'];
-
-	// // Apply filters, so that it may be modified.
-	// $url = apply_filters( 'gutenkit_click_to_tweet_url', $url );
-
-	// // Output the block if a URL is generated.
-	// $markup  = '';
-	// $markup .= sprintf( '<div class="%1$s" style="%2$s">', esc_attr( $class ), esc_attr( $text_align ) );
-	// $markup .= sprintf( '<div class="gutenkit--click-to-tweet" style="%1$s">', esc_attr( $bg_color ) );
-	// $markup .= sprintf( '<a class="gutenkit--click-to-tweet__link" target="_blank">%1$s</a>', esc_url( $url ) );
-	// $markup .= sprintf( '<span class="gutenkit--click-to-tweet__label gutenkit--gray" style="%1$s">Click to Tweet</a>', esc_attr( $text_color ) );
-	// $markup .= sprintf( '</div>' );
-	// $markup .= sprintf( '</div>' );
-
-
-	// return $markup;
-}
-
-
-
-
-
-
-
 /**
  * Main GutenKit Lite Click to Tweet Block
  *
@@ -161,15 +109,15 @@ class Gutenkit_Lite_Click_To_Tweet_Block {
 
 		register_block_type( 'gutenkit/click-to-tweet', array(
 			'attributes'      => array(
-				'cite'              => array(
-					'type'     => 'array',
-					'source'   => 'children',
-					'selector' => 'cite',
-				),
 				'tweet'             => array(
 					'type'     => 'array',
 					'source'   => 'children',
 					'selector' => 'span',
+				),
+				'cite'              => array(
+					'source'   => 'array',
+					'source'   => 'children',
+					'selector' => 'cite',
 				),
 				'align'             => array(
 					'type'    => 'string',
@@ -182,67 +130,17 @@ class Gutenkit_Lite_Click_To_Tweet_Block {
 					'type' => 'string',
 				),
 			),
-			'render_callback' => array( $this, 'on_render_block' ),
+			'render_callback' => array( $this, 'render_block' ),
 		) );
-	}
-
-	public function on_render_block( $attributes ) {
-
-
 	}
 
 	/**
 	 * Renders the `gutenkit/social-sharing` block on server.
 	 *
 	 * @param array $attributes The block attributes.
-	 * @return string Returns click to tweet element.
 	 */
 	public function render_block( $attributes ) {
 
-		$via   = is_array( $attributes ) && isset( $attributes['via'] ) ? str_replace( '@', '', $attributes['via'] ) : $attributes['via'];
-		$tweet = isset( $attributes['tweet'] ) ? $attributes['tweet'] : $attributes['tweet'];
-		$align = isset( $attributes['align'] ) ? $attributes['align'] : 'left';
-
-		// Markup and styles.
-		$class      = 'wp-block-gutenkit-click-to-tweet';
-		$text_align = "text-align:{$attributes['align']}";
-		$text_color = "text-color:{$attributes['color__text']}";
-
-		// Generate the Twitter URL.
-		$url = '
-			http://twitter.com/share?
-			text=' . $tweet[0] . '
-			&url=' . get_the_permalink() . '
-			&via=' . $via . '
-		';
-
-		// Apply filters, so that it may be modified.
-		$url = apply_filters( 'gutenkit_click_to_tweet_url', $url );
-
-		// Output the block if a URL is generated.
-		if ( $tweet ) {
-
-			// Render block content.
-			$block = sprintf(
-				'<div class="%1$s" style="%2$s">
-					<div class="gutenkit--click-to-tweet">
-						<span class="gutenkit--click-to-tweet__text gutenkit--header-font" style="%3$s">%4$s</span>
-						<a class="gutenkit--click-to-tweet__link" href="%5$s" target="_blank"></a>
-						<span class="gutenkit--click-to-tweet__label gutenkit--gray" style="%3$s">Click to Tweet</span>
-					</div>
-				</div>',
-				esc_attr( $class ),
-				esc_attr( $text_align ),
-				esc_attr( $text_color ),
-				esc_html( $tweet[0] ),
-				esc_url( $url )
-			);
-
-			return $block;
-
-		} else {
-			return 'asdfsd' . $attributes['tweet'];
-		}
 	}
 
 	/**

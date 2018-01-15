@@ -3,7 +3,7 @@
  */
 
 const { __ } = wp.i18n;
-const { Toolbar, PanelBody, PanelColor, Dashicon, IconButton } = wp.components;
+const { Toolbar, withAPIData, PanelBody, PanelColor, Dashicon, IconButton } = wp.components;
 const InspectorControls = wp.blocks.InspectorControls;
 const { RangeControl, ToggleControl, SelectControl } = InspectorControls;
 
@@ -17,28 +17,43 @@ const {
 	source
 } = wp.blocks;
 
-// const blockAttributes = {
-// 	via: {
-// 		type: 'array',
-// 		source: 'children',
-// 		selector: 'cite',
-// 	},
-// 	tweet: {
-// 		type: 'array',
-// 		source: 'children',
-// 		selector: '.gutenkit--click-to-tweet__text',
-// 	},
-// 	align: {
-// 		type: 'string',
-// 		default: 'left',
-// 	},
-// 	color__background: {
-// 		type: 'string',
-// 	},
-// 	color__text: {
-// 		type: 'string',
-// 	},
-// };
+const blockAttributes = {
+	cite: {
+		type: 'array',
+		source: 'children',
+		selector: '.gutenkit--click-to-tweet__via',
+	},
+	tweet: {
+		type: 'array',
+		source: 'children',
+		selector: '.gutenkit--click-to-tweet__text',
+	},
+	align: {
+		type: 'string',
+		default: 'left',
+	},
+	color__background: {
+		type: 'string',
+	},
+	color__text: {
+		type: 'string',
+	},
+};
+
+class GutenKitClickToTweet extends Component {
+	render( { post } ) {
+		return <div>{ post.data.link }</div>;
+	}
+}
+
+
+
+export default withAPIData( () => {
+	return {
+		posts: '/wp/v2/posts?per_page=1'
+	};
+} )( GutenKitClickToTweet );
+
 
 /**
  * Register Block.
@@ -58,9 +73,25 @@ registerBlockType( 'gutenkit/click-to-tweet', {
 	icon: 'twitter',
 	category: 'formatting',
 	keywords: [ __( 'twitter' ), __( 'social' ), __( 'gutenkit' )  ],
-	// attributes: blockAttributes,
+	attributes: blockAttributes,
 
-	edit( { attributes, setAttributes, focus, setFocus, className } ) {
+	edit: withAPIData( () => {
+
+	        return {
+	            posts: '/wp/v2/posts?per_page=1'
+	        }
+
+	    } )( ( { attributes, setAttributes, focus, setFocus, className, posts } ) => {
+
+	        if ( ! posts.data ) {
+	            return "loading !";
+	        }
+
+	        if ( posts.data.length === 0 ) {
+	            return "No posts";
+	        }
+
+	        var post = posts.data[ 0 ];
 
 		const {
 			tweet,
@@ -130,7 +161,7 @@ registerBlockType( 'gutenkit/click-to-tweet', {
 						style={ { color: color__text } }
 						focus={ focus && focus.editable === 'tweet' ? focus : null }
 						onFocus={ ( props ) => setFocus( { props, editable: 'tweet' } ) }
-						// formattingControls={ [] }
+						formattingControls={ [] }
 					/>
 
 					{ ( !! focus ) && (
@@ -145,15 +176,18 @@ registerBlockType( 'gutenkit/click-to-tweet', {
 							onChange={ onChangeCite }
 							focus={ focus && focus.editable === 'cite' ? focus : null }
 							onFocus={ ( props ) => setFocus( { props, editable: 'cite' } ) }
-							// formattingControls={ [] }
+							formattingControls={ [] }
+							keepPlaceholderOnFocus
 						/>
 					) }
+
+					{ post.link }
 
 				</div>
 
 			</div>
 		];
-	},
+	    } ),
 
 	save( { attributes, className } ) {
 
@@ -164,7 +198,6 @@ registerBlockType( 'gutenkit/click-to-tweet', {
 			<div className={ className } style={ { textAlign: align } }>
 				<div className={ 'gutenkit--click-to-tweet' } style={ { backgroundColor: color__background } } >
 					<span className={ 'gutenkit--click-to-tweet__text gutenkit--header-font' } style={ { color: color__text } } >{ tweet }</span>
-					<cite className={ 'gutenkit--click-to-tweet__via gutenkit--gray' } style={ { color: color__text } } >{ cite }</cite>
 				</div>
 			</div>
 		);
