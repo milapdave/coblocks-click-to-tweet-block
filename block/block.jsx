@@ -2,8 +2,10 @@
  * @@pkg.title
  */
 
+import TextareaAutosize from 'react-autosize-textarea';
+
 const { __ } = wp.i18n;
-const { Toolbar, withAPIData, PanelBody, PanelColor, Dashicon, IconButton } = wp.components;
+const { Toolbar, PanelBody, PanelColor, Dashicon, IconButton } = wp.components;
 const InspectorControls = wp.blocks.InspectorControls;
 const { RangeControl, TextControl, ToggleControl, SelectControl } = InspectorControls;
 
@@ -18,18 +20,16 @@ const {
 } = wp.blocks;
 
 const blockAttributes = {
-	cite: {
-		type: 'array',
+	via: {
 		source: 'meta',
-		meta: 'cite',
+		meta: 'via',
 	},
 	tweet: {
-		type: 'string',
-		selector: '.gutenkit--click-to-tweet__text',
+		source: 'meta',
+		meta: 'tweet',
 	},
 	align: {
 		type: 'string',
-		default: 'left',
 	},
 	color__background: {
 		type: 'string',
@@ -58,12 +58,13 @@ registerBlockType( 'gutenkit/click-to-tweet', {
 	category: 'formatting',
 	keywords: [ __( 'twitter' ), __( 'social' ), __( 'gutenkit' )  ],
 	attributes: blockAttributes,
+	useOnce: true,
 
-	edit( { className, attributes, setAttributes, focus, setFocus } ) {
+	edit( { className, attributes, setAttributes, focus, setFocus, id } ) {
 
 		const {
 			tweet,
-			cite,
+			via,
 			align,
 			color__background,
 			color__text
@@ -72,7 +73,13 @@ registerBlockType( 'gutenkit/click-to-tweet', {
 		const inspectorControls = focus && (
 			<InspectorControls key="inspector">
 
-				<TextControl label={ __( 'Twitter Username' ) } value={ cite } onChange={ onChangeCite } help={ __( 'Attribute the source of your Tweet to with your Twitter username. The attribution will appear in a Tweet as ” via @username”.' ) } />
+				<TextControl
+					label={ __( 'Twitter Username' ) }
+					placeholder='@'
+					value={ via }
+					onChange={ onChangeVia }
+					help={ __( 'Attribute the source of your Tweet with your Twitter username that appears as ”via @username”.' ) }
+				/>
 
 				<PanelColor title={ __( 'Background' ) } colorValue={ color__background } initialOpen={ false }>
 					<ColorPalette
@@ -95,12 +102,8 @@ registerBlockType( 'gutenkit/click-to-tweet', {
 			setAttributes( { align: newAlignment } );
 		}
 
-		function onChangeTweet( newTweet ) {
-			setAttributes( { tweet: newTweet } );
-		}
-
-		function onChangeCite( event ) {
-			setAttributes( { cite: event } );
+		function onChangeVia( event ) {
+			setAttributes( { via: event } );
 		}
 
 		return [
@@ -119,17 +122,12 @@ registerBlockType( 'gutenkit/click-to-tweet', {
 
 				<div className={ 'gutenkit--click-to-tweet' } style={ { backgroundColor: color__background } } >
 
-					<Editable
-						tagName="span"
+					<TextareaAutosize
+						className="gutenkit--click-to-tweet__tweet-text"
+						placeholder={ __( 'Enter your Tweet here…' ) }
 						value={ tweet }
-						placeholder={ __( 'Add your tweet text...' ) }
-						className={ 'gutenkit--click-to-tweet__text' }
-						onChange={ onChangeTweet }
 						style={ { color: color__text } }
-						focus={ focus && focus.editable === 'tweet' ? focus : null }
-						onFocus={ ( props ) => setFocus( { props, editable: 'tweet' } ) }
-						keepPlaceholderOnFocus
-						formattingControls={ [] }
+						onChange={ ( event ) => setAttributes( { tweet: event.target.value } ) }
 					/>
 
 					<span className={ 'gutenkit--click-to-tweet__label gutenkit--gray' } style={ { color: color__text } }>

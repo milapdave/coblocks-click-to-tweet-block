@@ -13,6 +13,10 @@
 	"author_uri": "https://richtabor.com",
 	"plugin_uri": "https://gutenkit.com",
 	"license": "GPL-3.0",
+	"dependencies": {
+		"react": "16.2.0",
+		"react-autosize-textarea": "2.0.0"
+	},
 	"devDependencies": {
 		"babel-core": "^6.25.0",
 		"babel-loader": "^7.1.1",

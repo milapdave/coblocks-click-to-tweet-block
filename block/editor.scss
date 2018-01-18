@@ -3,4 +3,31 @@
 	.wp-block-gutenkit-click-to-tweet {
 		margin-bottom: 0;
 	}
+
+	.gutenkit--click-to-tweet__tweet-text {
+		display: block;
+		margin: 0;
+		width: 100%;
+		border: none;
+		outline: none;
+		box-shadow: none;
+		resize: none;
+		font-size: 22px;
+		background: transparent !important;
+		overflow: hidden;
+		line-height: 1.4;
+		padding: 0;
+		transition: padding .2s linear;
+
+		&:focus {
+			box-shadow: none;
+		}
+	}
+
+	.gutenkit--click-to-tweet {
+
+		&__label {
+			font-family: "Libre Franklin", "Helvetica Neue", helvetica, arial, sans-serif;
+		}
+	}
 }
