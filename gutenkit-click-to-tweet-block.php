@@ -80,7 +80,6 @@ class Gutenkit_Lite_Click_To_Tweet_Block {
 	 * The Constructor.
 	 */
 	private function __construct() {
-
 		$this->_version = '@@pkg.version';
 		$this->_slug    = 'gutenkit-lite-click-to-tweet-block';
 		$this->_dir     = untrailingslashit( plugin_dir_path( __FILE__ ) );
@@ -107,7 +106,6 @@ class Gutenkit_Lite_Click_To_Tweet_Block {
 	 * @access public
 	 */
 	public function register_block() {
-
 		register_block_type( 'gutenkit/click-to-tweet', array(
 			'render_callback' => array( $this, 'render_block' ),
 		) );
