@@ -119,11 +119,11 @@ class Gutenkit_Lite_Click_To_Tweet_Block {
 	 * @access public
 	 */
 	public function register_meta() {
-		register_meta( 'post', 'via', array(
+		register_meta( 'post', 'gutenkit_ctt_via', array(
 			'show_in_rest' => true,
 			'single'       => true,
 		) );
-		register_meta( 'post', 'tweet', array(
+		register_meta( 'post', 'gutenkit_ctt_tweet', array(
 			'show_in_rest' => true,
 			'single'       => true,
 		) );
@@ -137,11 +137,11 @@ class Gutenkit_Lite_Click_To_Tweet_Block {
 	public function render_block( $attributes ) {
 
 		// Username.
-		$via = get_post_meta( get_the_ID(), 'via', true );
+		$via = get_post_meta( get_the_ID(), 'gutenkit_ctt_via', true );
 		$via = ( $via ) ? '&via=' . str_replace( '@', '', $via ) : false;
 
 		// Tweet.
-		$tweet      = get_post_meta( get_the_ID(), 'tweet', true );
+		$tweet      = get_post_meta( get_the_ID(), 'gutenkit_ctt_tweet', true );
 		$tweet_url  = ( $tweet ) ? '&text=' . $tweet : false;
 		$tweet_text = ( $tweet ) ? $tweet : false;
 

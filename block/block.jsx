@@ -22,11 +22,11 @@ const {
 const blockAttributes = {
 	via: {
 		source: 'meta',
-		meta: 'via',
+		meta: 'gutenkit_ctt_via',
 	},
 	tweet: {
 		source: 'meta',
-		meta: 'tweet',
+		meta: 'gutenkit_ctt_tweet',
 	},
 	align: {
 		type: 'string',
