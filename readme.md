@@ -4,8 +4,6 @@
 
 A Gutenberg block from [GutenKit](https://gutenkit.com?utm_medium=gutenkit-click-to-tweet-github&utm_source=readme&utm_campaign=readme&utm_content=gutenkit) that let's you easily add a click to Tweet element to your pages and posts.
 
-[![View the GutenKit Click to Tweet Block in action](https://user-images.githubusercontent.com/1813435/34620251-cfe7a21c-f212-11e7-978d-3bb90f0413eb.gif)](https://gutenkit.com)
-
 ## Installation ##
 
 1. Install the offical [Gutenberg](https://wordpress.org/plugins/gutenberg/) plugin. Note that Gutenberg is not suggested for use on production sites.
