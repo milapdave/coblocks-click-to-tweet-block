@@ -1,13 +1,6 @@
 .editor-block-list__block[data-type="gutenkit/click-to-tweet"] {
 
-	.gutenkit--click-to-tweet {
-
-		&__text {
-
-		}
-
-		&__via {
-
-		}
+	.wp-block-gutenkit-click-to-tweet {
+		margin-bottom: 0;
 	}
 }

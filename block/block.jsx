@@ -5,7 +5,7 @@
 const { __ } = wp.i18n;
 const { Toolbar, withAPIData, PanelBody, PanelColor, Dashicon, IconButton } = wp.components;
 const InspectorControls = wp.blocks.InspectorControls;
-const { RangeControl, ToggleControl, SelectControl } = InspectorControls;
+const { RangeControl, TextControl, ToggleControl, SelectControl } = InspectorControls;
 
 const {
 	registerBlockType,
@@ -20,12 +20,11 @@ const {
 const blockAttributes = {
 	cite: {
 		type: 'array',
-		source: 'children',
-		selector: '.gutenkit--click-to-tweet__via',
+		source: 'meta',
+		meta: 'cite',
 	},
 	tweet: {
-		type: 'array',
-		source: 'children',
+		type: 'string',
 		selector: '.gutenkit--click-to-tweet__text',
 	},
 	align: {
@@ -39,21 +38,6 @@ const blockAttributes = {
 		type: 'string',
 	},
 };
-
-class GutenKitClickToTweet extends Component {
-	render( { post } ) {
-		return <div>{ post.data.link }</div>;
-	}
-}
-
-
-
-export default withAPIData( () => {
-	return {
-		posts: '/wp/v2/posts?per_page=1'
-	};
-} )( GutenKitClickToTweet );
-
 
 /**
  * Register Block.
@@ -75,23 +59,7 @@ registerBlockType( 'gutenkit/click-to-tweet', {
 	keywords: [ __( 'twitter' ), __( 'social' ), __( 'gutenkit' )  ],
 	attributes: blockAttributes,
 
-	edit: withAPIData( () => {
-
-	        return {
-	            posts: '/wp/v2/posts?per_page=1'
-	        }
-
-	    } )( ( { attributes, setAttributes, focus, setFocus, className, posts } ) => {
-
-	        if ( ! posts.data ) {
-	            return "loading !";
-	        }
-
-	        if ( posts.data.length === 0 ) {
-	            return "No posts";
-	        }
-
-	        var post = posts.data[ 0 ];
+	edit( { className, attributes, setAttributes, focus, setFocus } ) {
 
 		const {
 			tweet,
@@ -104,9 +72,7 @@ registerBlockType( 'gutenkit/click-to-tweet', {
 		const inspectorControls = focus && (
 			<InspectorControls key="inspector">
 
-				<BlockDescription>
-					<p>{ __( 'Add a click to tweet element.' ) }</p>
-				</BlockDescription>
+				<TextControl label={ __( 'Twitter Username' ) } value={ cite } onChange={ onChangeCite } help={ __( 'Attribute the source of your Tweet to with your Twitter username. The attribution will appear in a Tweet as ” via @username”.' ) } />
 
 				<PanelColor title={ __( 'Background' ) } colorValue={ color__background } initialOpen={ false }>
 					<ColorPalette
@@ -114,6 +80,7 @@ registerBlockType( 'gutenkit/click-to-tweet', {
 						onChange={ ( colorValue ) => setAttributes( { color__background: colorValue } ) }
 					/>
 				</PanelColor>
+
 				<PanelColor title={ __( 'Text' ) } colorValue={ color__text } initialOpen={ false }>
 					<ColorPalette
 						value={ color__text }
@@ -132,8 +99,8 @@ registerBlockType( 'gutenkit/click-to-tweet', {
 			setAttributes( { tweet: newTweet } );
 		}
 
-		function onChangeCite( newCite ) {
-			setAttributes( { cite: newCite } );
+		function onChangeCite( event ) {
+			setAttributes( { cite: event } );
 		}
 
 		return [
@@ -161,45 +128,21 @@ registerBlockType( 'gutenkit/click-to-tweet', {
 						style={ { color: color__text } }
 						focus={ focus && focus.editable === 'tweet' ? focus : null }
 						onFocus={ ( props ) => setFocus( { props, editable: 'tweet' } ) }
+						keepPlaceholderOnFocus
 						formattingControls={ [] }
 					/>
 
-					{ ( !! focus ) && (
-
-						<Editable
-							tagName="cite"
-							multiline="false"
-							value={ cite }
-							placeholder={ __( '@username' ) }
-							className={ 'gutenkit--click-to-tweet__via' }
-							style={ { color: color__text } }
-							onChange={ onChangeCite }
-							focus={ focus && focus.editable === 'cite' ? focus : null }
-							onFocus={ ( props ) => setFocus( { props, editable: 'cite' } ) }
-							formattingControls={ [] }
-							keepPlaceholderOnFocus
-						/>
-					) }
-
-					{ post.link }
+					<span className={ 'gutenkit--click-to-tweet__label gutenkit--gray' } style={ { color: color__text } }>
+						{ __( 'Click to Tweet' ) }
+					</span>
 
 				</div>
 
 			</div>
 		];
-	    } ),
+	},
 
-	save( { attributes, className } ) {
-
-		const { tweet, cite, align, color__background, color__text } = attributes;
-
-		return (
-
-			<div className={ className } style={ { textAlign: align } }>
-				<div className={ 'gutenkit--click-to-tweet' } style={ { backgroundColor: color__background } } >
-					<span className={ 'gutenkit--click-to-tweet__text gutenkit--header-font' } style={ { color: color__text } } >{ tweet }</span>
-				</div>
-			</div>
-		);
+	save() {
+		return null;
 	},
 } );

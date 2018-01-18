@@ -87,7 +87,8 @@ class Gutenkit_Lite_Click_To_Tweet_Block {
 		$this->_url     = untrailingslashit( plugins_url( '/', __FILE__ ) );
 
 		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
-		// add_action( 'init', array( $this, 'register_block' ) );
+		add_action( 'init', array( $this, 'register_block' ) );
+		add_action( 'init', array( $this, 'register_meta' ) );
 	}
 
 	/**
@@ -108,29 +109,19 @@ class Gutenkit_Lite_Click_To_Tweet_Block {
 	public function register_block() {
 
 		register_block_type( 'gutenkit/click-to-tweet', array(
-			'attributes'      => array(
-				'tweet'             => array(
-					'type'     => 'array',
-					'source'   => 'children',
-					'selector' => 'span',
-				),
-				'cite'              => array(
-					'source'   => 'array',
-					'source'   => 'children',
-					'selector' => 'cite',
-				),
-				'align'             => array(
-					'type'    => 'string',
-					'default' => 'left',
-				),
-				'color__background' => array(
-					'type' => 'string',
-				),
-				'color__text'       => array(
-					'type' => 'string',
-				),
-			),
 			'render_callback' => array( $this, 'render_block' ),
+		) );
+	}
+
+	/**
+	 * Register the block's meta.
+	 *
+	 * @access public
+	 */
+	public function register_meta() {
+		register_meta( 'post', 'cite', array(
+			'show_in_rest' => true,
+			'single'       => false,
 		) );
 	}
 
@@ -140,6 +131,38 @@ class Gutenkit_Lite_Click_To_Tweet_Block {
 	 * @param array $attributes The block attributes.
 	 */
 	public function render_block( $attributes ) {
+
+		$via        = get_post_meta( get_the_ID(), 'cite', true );
+		$tweet      = is_array( $attributes ) && isset( $attributes['tweet'] ) ? $attributes['tweet'] : false;
+		$text_align = is_array( $attributes ) && isset( $attributes['align'] ) ? "text-align:{$attributes['align']}" : false;
+		$text_color = is_array( $attributes ) && isset( $attributes['color__text'] ) ? "color:{$attributes['color__text']}" : false;
+		$bg_color   = is_array( $attributes ) && isset( $attributes['color__background'] ) ? "background-color:{$attributes['color__background']}" : false;
+
+		// Block class.
+		$class = 'wp-block-gutenkit-click-to-tweet';
+
+		// Twitter Sharing URL.
+		$url = '
+			http://twitter.com/share?
+			&text=' . $tweet[0] . '
+			&url=' . esc_url( get_the_permalink() ) . '
+			&via=' . $via . '
+		';
+
+		// Apply filters, so that it may be modified.
+		$url = apply_filters( 'gutenkit_click_to_tweet_url', $url );
+
+		// Output the block.
+		$markup  = '';
+		$markup .= sprintf( '<div class="%1$s" style="%2$s">', esc_attr( $class ), esc_attr( $text_align ) );
+		$markup .= sprintf( '<div class="gutenkit--click-to-tweet" style="%1$s">', esc_attr( $bg_color ) );
+		$markup .= sprintf( '<h4 class="gutenkit--click-to-tweet__text gutenkit--header-font" style="%1$s">%2$s</h4>', esc_attr( $text_color ), esc_html( $tweet[0] ) );
+		$markup .= sprintf( '<a class="gutenkit--click-to-tweet__link" target="_blank" href="%1$s"></a>', esc_url( $url ) );
+		$markup .= sprintf( '<span class="gutenkit--click-to-tweet__label gutenkit--gray" style="%1$s">Click to Tweet</span>', esc_attr( $text_color ) );
+		$markup .= sprintf( '</div>' );
+		$markup .= sprintf( '</div>' );
+
+		return $markup;
 
 	}
 
