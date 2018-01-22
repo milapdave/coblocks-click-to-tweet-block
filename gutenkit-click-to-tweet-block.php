@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Click to Tweet Block Gutenberg
+ * Plugin Name: Gutenberg Click to Tweet Block by GutenKit
  * Plugin URI: https://gutenkit.com
  * Description: Easily add a click to tweet block into the upcoming Gutenberg editor. <strong>This is a beta release.</strong>
  * Author: Rich Tabor from GutenKit
