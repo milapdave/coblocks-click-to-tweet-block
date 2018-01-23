@@ -140,7 +140,7 @@ class Gutenkit_Lite_Click_To_Tweet_Block {
 
 		// Tweet.
 		$tweet      = get_post_meta( get_the_ID(), 'gutenkit_ctt_tweet', true );
-		$tweet_url  = ( $tweet ) ? '&text=' . $tweet : false;
+		$tweet_url  = ( $tweet ) ? rawurlencode( $tweet ) : false;
 		$tweet_text = ( $tweet ) ? $tweet : false;
 
 		// Styles.
@@ -153,7 +153,7 @@ class Gutenkit_Lite_Click_To_Tweet_Block {
 
 		// Twitter Sharing URL.
 		$permalink = get_the_permalink();
-		$url       = apply_filters( 'gutenkit_click_to_tweet_url', "http://twitter.com/share?&text={$tweet}&url={$permalink}{$via}" );
+		$url       = apply_filters( 'gutenkit_click_to_tweet_url', "http://twitter.com/share?&text={$tweet_url}&url={$permalink}{$via}" );
 
 		// Output the block.
 		$markup  = '';
