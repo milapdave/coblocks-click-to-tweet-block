@@ -4,6 +4,12 @@
 
 import TextareaAutosize from 'react-autosize-textarea';
 
+/**
+ * Internal dependencies
+ */
+import './editor.scss';
+import './style.scss';
+
 const { __ } = wp.i18n;
 const { Component } = wp.element;
 const { Toolbar, PanelColor, withFallbackStyles } = wp.components;
@@ -32,12 +38,6 @@ const ContrastCheckerWithFallbackStyles = withFallbackStyles( ( node, ownProps )
 		fallbackTextColor: textColor || ! textNode ? undefined : getComputedStyle( textNode ).color,
 	};
 } )( ContrastChecker );
-
-/**
- * Internal dependencies
- */
-import './editor.scss';
-import './style.scss';
 
 class GutenKitClickToTweet extends Component {
 
