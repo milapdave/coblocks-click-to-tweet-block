@@ -33,6 +33,12 @@ const ContrastCheckerWithFallbackStyles = withFallbackStyles( ( node, ownProps )
 	};
 } )( ContrastChecker );
 
+/**
+ * Internal dependencies
+ */
+import './editor.scss';
+import './style.scss';
+
 class GutenKitClickToTweet extends Component {
 
 	constructor() {

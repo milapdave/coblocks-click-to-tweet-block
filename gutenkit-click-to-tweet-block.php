@@ -3,13 +3,13 @@
  * Plugin Name: Gutenberg Click to Tweet Block by GutenKit
  * Plugin URI: https://gutenkit.com
  * Description: Easily add a click to tweet block into the upcoming Gutenberg editor. <strong>This is a beta release.</strong>
- * Author: Rich Tabor from GutenKit
+ * Author: @@pkg.author
  * Author URI: https://richtabor.com
  * Version: @@pkg.version
- * Text Domain: gutenkit
+ * Text Domain: @@textdomain
  * Domain Path: languages
- * Requires at least: 4.7
- * Tested up to: 4.9.1
+ * Requires at least: @@pkg.requires
+ * Tested up to: @@pkg.tested_up_to
  *
  * The following was made possible in part by the Gutenberg Boilerplate
  * Check it out - https://github.com/ahmadawais/Gutenberg-Boilerplate
@@ -178,7 +178,7 @@ class Gutenkit_Lite_Click_To_Tweet_Block {
 		// Styles.
 		wp_enqueue_style(
 			$this->_slug,
-			$this->_url . '/block/style.css',
+			$this->_url . '/block/build/style.css',
 			array( 'wp-blocks' ),
 			$this->_version
 		);
@@ -194,7 +194,7 @@ class Gutenkit_Lite_Click_To_Tweet_Block {
 		// Scripts.
 		wp_enqueue_script(
 			$this->_slug,
-			$this->_url . '/block/block.build.js',
+			$this->_url . '/block/build/index.js',
 			array( 'wp-blocks', 'wp-i18n', 'wp-element' ),
 			$this->_version
 		);
@@ -202,7 +202,7 @@ class Gutenkit_Lite_Click_To_Tweet_Block {
 		// Styles.
 		wp_enqueue_style(
 			$this->_slug . '-editor',
-			$this->_url . '/block/editor.css',
+			$this->_url . '/block/build/editor.css',
 			array( 'wp-edit-blocks' ),
 			$this->_version
 		);
