@@ -5,9 +5,10 @@
 import TextareaAutosize from 'react-autosize-textarea';
 
 const { __ } = wp.i18n;
-const { Toolbar, PanelBody, PanelColor, Dashicon, IconButton } = wp.components;
+const { Component } = wp.element;
+const { Toolbar, PanelColor, withFallbackStyles } = wp.components;
 const InspectorControls = wp.blocks.InspectorControls;
-const { RangeControl, TextControl, ToggleControl, SelectControl } = InspectorControls;
+const { TextControl } = InspectorControls;
 
 const {
 	registerBlockType,
@@ -16,58 +17,63 @@ const {
 	AlignmentToolbar,
 	BlockDescription,
 	ColorPalette,
+	ContrastChecker,
 	source
 } = wp.blocks;
 
-const blockAttributes = {
-	via: {
-		source: 'meta',
-		meta: 'gutenkit_ctt_via',
-	},
-	tweet: {
-		source: 'meta',
-		meta: 'gutenkit_ctt_tweet',
-	},
-	align: {
-		type: 'string',
-	},
-	color__background: {
-		type: 'string',
-	},
-	color__text: {
-		type: 'string',
-	},
-};
+const { getComputedStyle } = window;
 
-/**
- * Register Block.
- *
- * Registers a new block provided a unique name and an object defining its
- * behavior. Once registered, the block is made available as an option to any
- * editor interface where blocks are implemented.
- *
- * @param  {string}   name     Block name.
- * @param  {Object}   settings Block settings.
- * @return {?WPBlock}          The block, if it has been successfully
- *                             registered; otherwise `undefined`.
- */
-registerBlockType( 'gutenkit/click-to-tweet', {
-	title: __( 'Click to Tweet' ),
-	description: __( 'Easily create tweetable content for your readers to share.' ),
-	icon: 'twitter',
-	category: 'formatting',
-	keywords: [ __( 'twitter' ), __( 'social' ), __( 'gutenkit' )  ],
-	attributes: blockAttributes,
-	useOnce: true,
+const ContrastCheckerWithFallbackStyles = withFallbackStyles( ( node, ownProps ) => {
+	const { textColor, backgroundColor } = ownProps;
+	//avoid the use of querySelector if textColor color is known and verify if node is available.
+	const textNode = ! textColor && node ? node.querySelector( '[contenteditable="true"]' ) : null;
+	return {
+		fallbackBackgroundColor: backgroundColor || ! node ? undefined : getComputedStyle( node ).backgroundColor,
+		fallbackTextColor: textColor || ! textNode ? undefined : getComputedStyle( textNode ).color,
+	};
+} )( ContrastChecker );
 
-	edit( { className, attributes, setAttributes, focus, setFocus, id } ) {
+class GutenKitClickToTweet extends Component {
+
+	constructor() {
+		super( ...arguments );
+		this.nodeRef = null;
+		this.bindRef = this.bindRef.bind( this );
+		this.updateAlignment = this.updateAlignment.bind( this );
+		this.updateVia = this.updateVia.bind( this );
+	}
+
+	updateAlignment( nextAlign ) {
+		this.props.setAttributes( { align: nextAlign } );
+	}
+
+	updateVia( nextVia ) {
+		this.props.setAttributes( { via: nextVia } );
+	}
+
+	bindRef( node ) {
+		if ( ! node ) {
+			return;
+		}
+		this.nodeRef = node;
+	}
+
+	render() {
+
+		const {
+			attributes,
+			setAttributes,
+			focus,
+			setFocus,
+			className,
+		} = this.props;
 
 		const {
 			tweet,
 			via,
 			align,
-			color__background,
-			color__text
+			backgroundColor,
+			textColor,
 		} = attributes;
 
 		const at_icon = [
@@ -93,26 +99,23 @@ registerBlockType( 'gutenkit/click-to-tweet', {
 
 		const inspectorControls = focus && (
 			<InspectorControls key="inspector">
-
 				<TextControl
 					label={ __( 'Twitter Username' ) }
 					placeholder='@'
 					value={ via }
-					onChange={ onChangeVia }
+					onChange={ this.updateVia }
 					help={ __( 'Attribute the source of your Tweet with your Twitter username that appears as ”via @username”.' ) }
 				/>
-
-				<PanelColor title={ __( 'Background' ) } colorValue={ color__background } initialOpen={ false }>
+				<PanelColor title={ __( 'Background' ) } colorValue={ backgroundColor } initialOpen={ false }>
 					<ColorPalette
-						value={ color__background }
-						onChange={ ( colorValue ) => setAttributes( { color__background: colorValue } ) }
+						value={ backgroundColor }
+						onChange={ ( colorValue ) => setAttributes( { backgroundColor: colorValue } ) }
 					/>
 				</PanelColor>
-
-				<PanelColor title={ __( 'Text' ) } colorValue={ color__text } initialOpen={ false }>
+				<PanelColor title={ __( 'Text' ) } colorValue={ textColor } initialOpen={ false }>
 					<ColorPalette
-						value={ color__text }
-						onChange={ ( colorValue ) => setAttributes( { color__text: colorValue } ) }
+						value={ textColor }
+						onChange={ ( colorValue ) => setAttributes( { textColor: colorValue } ) }
 					/>
 				</PanelColor>
 
@@ -123,7 +126,7 @@ registerBlockType( 'gutenkit/click-to-tweet', {
 			<BlockControls key="controls">
 				<AlignmentToolbar
 					value={ align }
-					onChange={ onChangeAlignment }
+					onChange={ this.updateAlignment }
 				/>
 				<Toolbar>
 					<label htmlFor={ 'gutenkit--click-to-tweet__tweet-via' } aria-label={ __( 'Twitter Username' ) }>
@@ -142,30 +145,22 @@ registerBlockType( 'gutenkit/click-to-tweet', {
 			</BlockControls>
 		);
 
-		function onChangeAlignment( newAlignment ) {
-			setAttributes( { align: newAlignment } );
-		}
-
-		function onChangeVia( event ) {
-			setAttributes( { via: event } );
-		}
-
 		return [
 			controls,
 			inspectorControls,
 			<div className={ className } style={ { textAlign: align } }>
 
-				<div className={ 'gutenkit--click-to-tweet' } style={ { backgroundColor: color__background } } >
+				<div className={ 'gutenkit--click-to-tweet' } style={ { backgroundColor: backgroundColor } }>
 
 					<TextareaAutosize
 						className="gutenkit--click-to-tweet__tweet-text"
 						placeholder={ __( 'Enter your Tweet here…' ) }
 						value={ tweet }
-						style={ { color: color__text } }
+						style={ { color: textColor } }
 						onChange={ ( event ) => setAttributes( { tweet: event.target.value } ) }
 					/>
 
-					<span className={ 'gutenkit--click-to-tweet__label gutenkit--gray' } style={ { color: color__text } }>
+					<span className={ 'gutenkit--click-to-tweet__label gutenkit--gray' } style={ { color: textColor } }>
 						{ __( 'Click to Tweet' ) }
 					</span>
 
@@ -173,7 +168,48 @@ registerBlockType( 'gutenkit/click-to-tweet', {
 
 			</div>
 		];
+
+	}
+
+}
+
+const blockAttributes = {
+	via: {
+		source: 'meta',
+		meta: 'gutenkit_ctt_via',
 	},
+	tweet: {
+		source: 'meta',
+		meta: 'gutenkit_ctt_tweet',
+	},
+	align: {
+		type: 'string',
+	},
+	backgroundColor: {
+		type: 'string',
+	},
+	textColor: {
+		type: 'string',
+	},
+};
+
+registerBlockType( 'gutenkit/click-to-tweet', {
+
+	title: __( 'Click to Tweet' ),
+
+	description: __( 'Easily create tweetable content for your readers to share.' ),
+
+	icon: 'twitter',
+
+	category: 'formatting',
+
+	keywords: [ __( 'twitter' ), __( 'social' ), __( 'gutenkit' )  ],
+
+	attributes: blockAttributes,
+
+	useOnce: true,
+
+	edit: GutenKitClickToTweet,
 
 	save() {
 		return null;

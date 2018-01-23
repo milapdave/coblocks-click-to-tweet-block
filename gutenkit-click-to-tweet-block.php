@@ -145,8 +145,8 @@ class Gutenkit_Lite_Click_To_Tweet_Block {
 
 		// Styles.
 		$text_align = is_array( $attributes ) && isset( $attributes['align'] ) ? "text-align:{$attributes['align']}" : false;
-		$text_color = is_array( $attributes ) && isset( $attributes['color__text'] ) ? "color:{$attributes['color__text']}" : false;
-		$bg_color   = is_array( $attributes ) && isset( $attributes['color__background'] ) ? "background-color:{$attributes['color__background']}" : false;
+		$text_color = is_array( $attributes ) && isset( $attributes['textColor'] ) ? "color:{$attributes['textColor']}" : false;
+		$bg_color   = is_array( $attributes ) && isset( $attributes['backgroundColor'] ) ? "background-color:{$attributes['backgroundColor']}" : false;
 
 		// Block class.
 		$class = 'wp-block-gutenkit-click-to-tweet';

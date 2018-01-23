@@ -4,7 +4,7 @@
 	"slug": "click-to-tweet-block-gutenberg",
 	"textdomain": "click-to-tweet-block-gutenberg",
 	"author": "Rich from GutenKit",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"main": "block/block.jsx",
 	"tags": "gutenberg, tweet, click to tweet, twitter, marketing",
 	"requires": "4.7",
