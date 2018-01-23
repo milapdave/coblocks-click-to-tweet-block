@@ -18,7 +18,7 @@ If you find a 🐞 or an issue, [create an issue](https://github.com/thatpluginc
 2. Browse to the folder in the command line.
 3. Run the `npm install` command to install the plugin's dependencies within a /node_modules/ folder.
 4. Run the `npm run dev` command for development.
-5. Run the default gulp task to process the style.scss and editor.scss files.
+5. Run the `build` gulp task to process build files and generate a zip.
 
 ## Support ##
 Need help? This is a developer's portal for GutenKit and should not be used for general support. Please visit the [support forum on WordPress.org](https://wordpress.org/support/plugin/click-to-tweet-block-gutenberg) if you need help.
