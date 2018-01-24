@@ -1,5 +1,11 @@
 .editor-block-list__block[data-type="gutenkit/click-to-tweet"] {
 
+	&[data-border="false"] {
+		.gutenkit--click-to-tweet {
+			box-shadow: none;
+		}
+	}
+
 	.components-toolbar {
 		transform: translate3d(0, 0, 0);
 	}
@@ -8,7 +14,7 @@
 		margin-bottom: 0;
 	}
 
-	.gutenkit--click-to-tweet__tweet-text {
+	.gutenkit--click-to-tweet__text {
 		display: block;
 		margin: 0;
 		width: 100%;

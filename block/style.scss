@@ -10,6 +10,10 @@
 			padding: 34px 36px 32px;
 		}
 
+		&.no-border {
+			box-shadow: none;
+		}
+
 		&,
 		&__link {
 			border-radius: 6px;

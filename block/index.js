@@ -1,7 +1,6 @@
 /**
- * @@pkg.title
+ * External dependencies
  */
-
 import TextareaAutosize from 'react-autosize-textarea';
 
 /**
@@ -14,7 +13,7 @@ const { __ } = wp.i18n;
 const { Component } = wp.element;
 const { Toolbar, PanelColor, withFallbackStyles } = wp.components;
 const InspectorControls = wp.blocks.InspectorControls;
-const { TextControl } = InspectorControls;
+const { TextControl, ToggleControl } = InspectorControls;
 
 const {
 	registerBlockType,
@@ -44,12 +43,12 @@ class GutenKitClickToTweet extends Component {
 		super( ...arguments );
 		this.nodeRef = null;
 		this.bindRef = this.bindRef.bind( this );
-		this.updateAlignment = this.updateAlignment.bind( this );
+		this.updateTextAlignment = this.updateTextAlignment.bind( this );
 		this.updateVia = this.updateVia.bind( this );
 	}
 
-	updateAlignment( nextAlign ) {
-		this.props.setAttributes( { align: nextAlign } );
+	updateTextAlignment( nextAlignText ) {
+		this.props.setAttributes( { alignText: nextAlignText } );
 	}
 
 	updateVia( nextVia ) {
@@ -76,9 +75,10 @@ class GutenKitClickToTweet extends Component {
 		const {
 			tweet,
 			via,
-			align,
+			alignText,
 			backgroundColor,
 			textColor,
+			border,
 		} = attributes;
 
 		const at_icon = [
@@ -109,7 +109,11 @@ class GutenKitClickToTweet extends Component {
 					placeholder='@'
 					value={ via }
 					onChange={ this.updateVia }
-					help={ __( 'Attribute the source of your Tweet with your Twitter username that appears as ”via @username”.' ) }
+				/>
+				<ToggleControl
+					label={ __( 'Border' ) }
+					checked={ !! border }
+					onChange={ () => setAttributes( {  border: ! border } ) }
 				/>
 				<PanelColor title={ __( 'Background' ) } colorValue={ backgroundColor } initialOpen={ false }>
 					<ColorPalette
@@ -130,8 +134,8 @@ class GutenKitClickToTweet extends Component {
 		const controls = focus && (
 			<BlockControls key="controls">
 				<AlignmentToolbar
-					value={ align }
-					onChange={ this.updateAlignment }
+					value={ alignText }
+					onChange={ this.updateTextAlignment }
 				/>
 				<Toolbar>
 					<label htmlFor={ 'gutenkit--click-to-tweet__tweet-via' } aria-label={ __( 'Twitter Username' ) }>
@@ -153,15 +157,15 @@ class GutenKitClickToTweet extends Component {
 		return [
 			controls,
 			inspectorControls,
-			<div className={ className } style={ { textAlign: align } }>
+			<div className={ className } style={ { textAlign: alignText } }>
 
 				<div className={ 'gutenkit--click-to-tweet' } style={ { backgroundColor: backgroundColor } }>
 
 					<TextareaAutosize
-						className="gutenkit--click-to-tweet__tweet-text"
+						className="gutenkit--click-to-tweet__text gutenkit--header-font"
 						placeholder={ __( 'Enter your Tweet here…' ) }
 						value={ tweet }
-						style={ { color: textColor } }
+						style={ { color: textColor, textAlign: alignText } }
 						onChange={ ( event ) => setAttributes( { tweet: event.target.value } ) }
 					/>
 
@@ -187,7 +191,7 @@ const blockAttributes = {
 		source: 'meta',
 		meta: 'gutenkit_ctt_tweet',
 	},
-	align: {
+	alignText: {
 		type: 'string',
 	},
 	backgroundColor: {
@@ -195,6 +199,10 @@ const blockAttributes = {
 	},
 	textColor: {
 		type: 'string',
+	},
+	border: {
+		type: 'boolean',
+		default: false,
 	},
 };
 
@@ -215,6 +223,17 @@ registerBlockType( 'gutenkit/click-to-tweet', {
 	useOnce: true,
 
 	edit: GutenKitClickToTweet,
+
+	getEditWrapperProps( attributes ) {
+		const { border } = attributes;
+		const props = {};
+
+		if ( ! border ) {
+			props[ 'data-border' ] = 'false';
+		}
+
+		return props;
+	},
 
 	save() {
 		return null;

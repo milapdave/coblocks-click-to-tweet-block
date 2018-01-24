@@ -144,9 +144,10 @@ class Gutenkit_Lite_Click_To_Tweet_Block {
 		$tweet_text = ( $tweet ) ? $tweet : false;
 
 		// Styles.
-		$text_align = is_array( $attributes ) && isset( $attributes['align'] ) ? "text-align:{$attributes['align']}" : false;
-		$text_color = is_array( $attributes ) && isset( $attributes['textColor'] ) ? "color:{$attributes['textColor']}" : false;
-		$bg_color   = is_array( $attributes ) && isset( $attributes['backgroundColor'] ) ? "background-color:{$attributes['backgroundColor']}" : false;
+		$text_align   = is_array( $attributes ) && isset( $attributes['alignText'] ) ? "style=text-align:{$attributes['alignText']}" : false;
+		$text_color   = is_array( $attributes ) && isset( $attributes['textColor'] ) ? "style=color:{$attributes['textColor']}" : false;
+		$bg_color     = is_array( $attributes ) && isset( $attributes['backgroundColor'] ) ? "style=background-color:{$attributes['backgroundColor']}" : false;
+		$border_class = is_array( $attributes ) && isset( $attributes['border'] ) ? 'true' : 'no-border';
 
 		// Block class.
 		$class = 'wp-block-gutenkit-click-to-tweet';
@@ -157,11 +158,11 @@ class Gutenkit_Lite_Click_To_Tweet_Block {
 
 		// Output the block.
 		$markup  = '';
-		$markup .= sprintf( '<div class="%1$s" style="%2$s">', esc_attr( $class ), esc_attr( $text_align ) );
-		$markup .= sprintf( '<div class="gutenkit--click-to-tweet" style="%1$s">', esc_attr( $bg_color ) );
-		$markup .= sprintf( '<span class="gutenkit--click-to-tweet__text gutenkit--header-font" style="%1$s">%2$s</span>', esc_attr( $text_color ), esc_html( $tweet_text ) );
+		$markup .= sprintf( '<div class="%1$s" %2$s>', esc_attr( $class ), esc_attr( $text_align ) );
+		$markup .= sprintf( '<div class="gutenkit--click-to-tweet %1$s" %2$s>', esc_attr( $border_class ), esc_attr( $bg_color ) );
+		$markup .= sprintf( '<span class="gutenkit--click-to-tweet__text gutenkit--header-font" %1$s>%2$s</span>', esc_attr( $text_color ), esc_html( $tweet_text ) );
 		$markup .= sprintf( '<a class="gutenkit--click-to-tweet__link" target="_blank" href="%1$s"></a>', esc_url( $url ) );
-		$markup .= sprintf( '<span class="gutenkit--click-to-tweet__label gutenkit--gray" style="%1$s">Click to Tweet</span>', esc_attr( $text_color ) );
+		$markup .= sprintf( '<span class="gutenkit--click-to-tweet__label gutenkit--gray" %1$s>%2$s</span>', esc_attr( $text_color ), esc_html__( 'Click to Tweet', '@@textdomain' ) );
 		$markup .= sprintf( '</div>' );
 		$markup .= sprintf( '</div>' );
 
