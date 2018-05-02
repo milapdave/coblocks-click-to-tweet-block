@@ -1,7 +1,7 @@
 # Gutenberg Click to Tweet Block by CoBlocks
 
-[![WP](https://img.shields.io/badge/WordPress-%E2%86%92-lightgrey.svg?style=flat-square)](https://wordpress.org/plugins/click-to-tweet-gutenberg)
-[![WordPress plugin](https://img.shields.io/wordpress/plugin/dt/click-to-tweet-gutenberg.svg?style=flat)](https://wordpress.org/plugins/click-to-tweet-gutenberg/) [![WordPress plugin](https://img.shields.io/wordpress/plugin/v/click-to-tweet-gutenberg.svg?style=flat)](https://wordpress.org/plugins/click-to-tweet-gutenberg/) [![WordPress](https://img.shields.io/wordpress/v/click-to-tweet-gutenberg.svg?style=flat)]() [![License](https://img.shields.io/badge/license-GPL--3.0%2B-red.svg)](https://github.com/thatplugincompany/coblocks-click-to-tweet-block/blob/master/license.txt)
+[![WP](https://img.shields.io/badge/WordPress-%E2%86%92-lightgrey.svg?style=flat-square)](https://wordpress.org/plugins/click-to-tweet-block-gutenberg)
+[![WordPress plugin](https://img.shields.io/wordpress/plugin/dt/click-to-tweet-block-gutenberg.svg?style=flat)](https://wordpress.org/plugins/click-to-tweet-block-gutenberg) [![WordPress plugin](https://img.shields.io/wordpress/plugin/v/click-to-tweet-block-gutenberg.svg?style=flat)](https://wordpress.org/plugins/click-to-tweet-block-gutenberg) [![WordPress](https://img.shields.io/wordpress/v/click-to-tweet-block-gutenberg.svg?style=flat)]() [![License](https://img.shields.io/badge/license-GPL--3.0%2B-red.svg)](https://github.com/thatplugincompany/coblocks-click-to-tweet-block/blob/master/license.txt)
 
 [![CoBlocks, an upcoming suite of Gutenberg Blocks for Content Marketers](https://user-images.githubusercontent.com/1813435/39494435-5fc12b72-4d64-11e8-8dc4-24e159afe340.jpg)](https://coblocks.com?utm_medium=coblocks-click-to-tweet-block-github&utm_source=readme&utm_campaign=readme&utm_content=banner)
 
