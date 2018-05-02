@@ -1,7 +1,7 @@
 {
   "name": "click-to-tweet-gutenberg",
   "title": "CoBlocks Click to Tweet Block",
-  "version": "1.2.0",
+  "version": "1.1.0",
   "private": true,
   "author": "Rich Tabor from CoBlocks",
   "requires": "4.7",
