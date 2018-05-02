@@ -6,7 +6,7 @@
  * Author: Rich Tabor from CoBlocks
  * Author URI: https://coblocks.com
  * Tags: gutenberg, editor, block, twitter, tweet
- * Version: 1.2.0
+ * Version: 1.1.0
  * Text Domain: '@@pkg.name'
  * Domain Path: languages
  * Tested up to: @@pkg.tested_up_to
