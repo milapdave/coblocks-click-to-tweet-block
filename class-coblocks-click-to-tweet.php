@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Gutenberg Click to Tweet Block by CoBlocks
+ * Plugin Name: Gutenberg Click to Tweet Block
  * Plugin URI: https://coblocks.com
  * Description: @@pkg.description
  * Author: Rich Tabor from CoBlocks
@@ -89,21 +89,13 @@ class CoBlocks_Click_To_Tweet {
 	private $_store;
 
 	/**
-	 * This plugin.
-	 *
-	 * @var string $_plugin
-	 */
-	private $_plugin;
-
-	/**
 	 * The Constructor.
 	 */
 	private function __construct() {
 
 		$this->_version = '@@pkg.version';
-		$this->_slug    = 'coblocks';
+		$this->_slug    = 'coblocks-click-to-tweet-block-plugin';
 		$this->_store   = 'https://coblocks.com';
-		$this->_plugin  = $this->_slug . '-click-to-tweet-block-plugin';
 		$this->_dir     = untrailingslashit( plugin_dir_path( '/', __FILE__ ) );
 		$this->_url     = untrailingslashit( plugins_url( '/', __FILE__ ) );
 
@@ -158,7 +150,7 @@ class CoBlocks_Click_To_Tweet {
 		$slug = $this->_slug;
 
 		register_block_type(
-			$slug . '/click-to-tweet', array(
+			'coblocks/click-to-tweet', array(
 				'editor_script' => $slug . '-editor',
 				'editor_style'  => $slug . '-editor',
 				'style'         => $slug . '-frontend',
@@ -253,7 +245,7 @@ class CoBlocks_Click_To_Tweet {
 		$url = $this->get_store_url(
 			'support',
 			array(
-				'utm_medium'   => $this->_plugin,
+				'utm_medium'   => $this->_slug,
 				'utm_source'   => 'plugins-page',
 				'utm_campaign' => 'plugins-action-link',
 				'utm_content'  => 'Get CoBlocks',
@@ -286,7 +278,7 @@ class CoBlocks_Click_To_Tweet {
 		$url = $this->get_store_url(
 			'extensions',
 			array(
-				'utm_medium'   => $this->_plugin,
+				'utm_medium'   => $this->_slug,
 				'utm_source'   => 'plugins-page',
 				'utm_campaign' => 'plugins-row',
 				'utm_content'  => 'extensions',
